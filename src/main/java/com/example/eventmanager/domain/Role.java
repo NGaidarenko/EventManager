@@ -1,2 +1,6 @@
-package com.example.eventmanager.domain;public class Role {
+package com.example.eventmanager.domain;
+
+public enum Role {
+    USER,
+    ADMIN
 }

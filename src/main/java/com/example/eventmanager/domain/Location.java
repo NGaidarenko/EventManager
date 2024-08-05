@@ -1,6 +1,6 @@
 package com.example.eventmanager.domain;
 
-public record LocationDomain (
+public record Location(
     Long id,
     String name,
     String address,

@@ -1,2 +1,6 @@
-package com.example.eventmanager.jwt;public class JwtTokenResponse {
+package com.example.eventmanager.jwt;
+
+public record JwtTokenResponse (
+    String jwtToken
+){
 }
