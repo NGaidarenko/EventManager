@@ -1,5 +1,7 @@
 package com.example.eventmanager.jwt;
 
+import com.example.eventmanager.domain.User;
+import com.example.eventmanager.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +28,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenManager jwtTokenManager;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -45,8 +50,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String login = jwtTokenManager.getLoginFromToken(jwt);
         String role = jwtTokenManager.getRoleFromToken(jwt);
 
+        User user = userService.getUserByLogin(login);
+
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                login,
+                user,
                 null,
                 List.of(new SimpleGrantedAuthority(role))
         );
