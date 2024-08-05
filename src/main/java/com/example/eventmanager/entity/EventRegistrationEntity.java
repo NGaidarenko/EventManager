@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "registration_event")
+@Table(name = "registration_event", schema = "event-manage")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,5 +21,5 @@ public class EventRegistrationEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
-    private EventEntity entity;
+    private EventEntity event;
 }

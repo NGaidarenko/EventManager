@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "events")
+@Table(name = "events", schema = "event-manage")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -48,7 +48,8 @@ public class SecurityConfig {
                         "/webjars/**",
                         "/v3/api-docs/swagger-config",
                         "/openapi.yaml",
-                        "swagger-ui/index.html?continue"
+                        "swagger-ui/index.html?continue",
+                        "/v3/api-docs.yaml"
                 );
     }
 

@@ -7,11 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Repository
 public interface EventRepository extends JpaRepository<EventEntity, Long> {
 
     @Modifying
@@ -23,30 +25,32 @@ public interface EventRepository extends JpaRepository<EventEntity, Long> {
                            @Param("status")EventStatus status);
 
     @Query("""
-        select e from EventEntity e
-        where (:name is null or e.name = :se)
-        and (:minPlaces is null or e.maxPlaces > :minPlaces)
-        and (:maxPlaces is null or e.maxPlaces < :maxPlaces)
-        and (:minCost is null or e.cost > :minCost)
-        and (:maxCost is null or e.cost < :maxCost)
-        and (:minDuration is null or e.duration > :minDuration)
-        and (:maxDuration is null or e.duration < :maxDuration)
-        and (:locationId is null or e.locationId = :locationId)
-        and (:status is null or e.status = :status)
-    """)
-    List<EventEntity> searchEvents(
+            SELECT e FROM EventEntity e 
+            WHERE (:name IS NULL OR e.name LIKE %:name%) 
+            AND (:placesMin IS NULL OR e.maxPlaces >= :placesMin) 
+            AND (:placesMax IS NULL OR e.maxPlaces <= :placesMax) 
+            AND (CAST(:dateStartAfter as date) IS NULL OR e.date >= :dateStartAfter) 
+            AND (CAST(:dateStartBefore as date) IS NULL OR e.date <= :dateStartBefore) 
+            AND (:costMin IS NULL OR e.cost >= :costMin) 
+            AND (:costMax IS NULL OR e.cost <= :costMax) 
+            AND (:durationMin IS NULL OR e.duration >= :durationMin) 
+            AND (:durationMax IS NULL OR e.duration <= :durationMax) 
+            AND (:locationId IS NULL OR e.locationId = :locationId) 
+            AND (:eventStatus IS NULL OR e.status = :eventStatus)
+            """)
+    List<EventEntity> findEvents(
             @Param("name") String name,
-            @Param("minPlaces") Integer minPlaces,
-            @Param("maxPlaces") Integer maxPlaces,
-            @Param("dateAfter") LocalDateTime dateAfter,
-            @Param("dateBefore") LocalDateTime dateBefore,
-            @Param("minCost") Integer minCost,
-            @Param("maxCost") Integer maxCost,
-            @Param("minDuration") Integer minDuration,
-            @Param("maxDuration") Integer maxDuration,
+            @Param("placesMin") Integer placesMin,
+            @Param("placesMax") Integer placesMax,
+            @Param("dateStartAfter") LocalDateTime dateStartAfter,
+            @Param("dateStartBefore") LocalDateTime dateStartBefore,
+            @Param("costMin") Integer costMin,
+            @Param("costMax") Integer costMax,
+            @Param("durationMin") Integer durationMin,
+            @Param("durationMax") Integer durationMax,
             @Param("locationId") Long locationId,
-            @Param("status") EventStatus status
-            );
+            @Param("eventStatus") EventStatus eventStatus
+    );
 
     List<EventEntity> findAllByOwnerId(Long ownerId);
 }

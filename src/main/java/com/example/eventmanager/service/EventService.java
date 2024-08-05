@@ -134,7 +134,7 @@ public class EventService {
 
     public List<Event> searchByFilter(EventSearchFilter searchFilter) {
 
-        List<EventEntity> eventEntities = eventRepository.searchEvents(
+        List<EventEntity> eventEntities = eventRepository.findEvents(
                 searchFilter.name(),
                 searchFilter.minPlaces(),
                 searchFilter.maxPlaces(),
