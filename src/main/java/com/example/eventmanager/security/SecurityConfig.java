@@ -71,10 +71,19 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/users/auth").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/users/{userId}").hasAuthority("ADMIN")
+
                                 .requestMatchers(HttpMethod.POST, "/locations").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/locations/{locationId}").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/locations/{locationId}").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/locations/**").hasAnyAuthority("ADMIN", "USER")
+
+                                .requestMatchers(HttpMethod.POST, "/events").hasAuthority("USER")
+                                .requestMatchers(HttpMethod.DELETE, "/events/{eventId}").hasAnyAuthority("ADMIN", "USER")
+                                .requestMatchers(HttpMethod.PUT, "/events/{eventId}").hasAnyAuthority("ADMIN", "USER")
+                                .requestMatchers(HttpMethod.GET, "/events/**").hasAnyAuthority("ADMIN", "USER")
+                                .requestMatchers(HttpMethod.POST, "/events/search").hasAnyAuthority("ADMIN", "USER")
+                                .requestMatchers(HttpMethod.GET, "/events/my").hasAuthority("USER")
+
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)

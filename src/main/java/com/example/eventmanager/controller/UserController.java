@@ -55,7 +55,6 @@ public class UserController {
         log.info("Authenticating user: {}", signInRequest);
         String jwtToken = userAuthenticationService.authenticateUser(signInRequest);
 
-
         return new ResponseEntity<>(new JwtTokenResponse(jwtToken), HttpStatus.OK);
     }
 }

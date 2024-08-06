@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/event")
+@RequestMapping("/events")
 public class EventController {
     private static final Logger log = LoggerFactory.getLogger(EventController.class);
 
@@ -27,6 +27,7 @@ public class EventController {
 
     @Autowired
     private EventDtoMapper dtoMapper;
+
     @PostMapping
     public ResponseEntity<EventDto> createEvent(@RequestBody @Valid EventCreateRequestDto createRequestDto) {
         log.info("Creating new event: {}", createRequestDto);
@@ -60,7 +61,7 @@ public class EventController {
         return new ResponseEntity<>(dtoMapper.toDto(updatedEvent), HttpStatus.OK);
     }
 
-    @RequestMapping("/search")
+    @PostMapping("/search")
     public ResponseEntity<List<EventDto>> searchEvent(@RequestBody EventSearchFilter eventSearchFilter) {
         log.info("Search event with filter: {}", eventSearchFilter);
 

@@ -44,7 +44,7 @@ public class LocationController {
     }
 
     @PostMapping
-    public ResponseEntity<LocationDto> createLocation(LocationDto newLocationDto) {
+    public ResponseEntity<LocationDto> createLocation(@RequestBody @Valid LocationDto newLocationDto) {
         log.info("Create new location: {}", newLocationDto);
         Location location = locationDtoMapper.toDomain(newLocationDto);
         location = locationService.saveLocation(location);

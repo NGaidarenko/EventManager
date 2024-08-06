@@ -43,7 +43,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String jwt = authHeader.substring(7);
         if (!jwtTokenManager.validateToken(jwt)) {
             filterChain.doFilter(request, response);
-            log.info("Jwt not valid");
             return;
         }
 
@@ -58,9 +57,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 List.of(new SimpleGrantedAuthority(role))
         );
 
-        log.info("Jwt authenticated");
+        log.info("JWT authenticated for user: {}", login);
         SecurityContextHolder.getContext().setAuthentication(token);
         filterChain.doFilter(request, response);
+        log.info("End of JwtTokenFilter");
     }
-
 }
