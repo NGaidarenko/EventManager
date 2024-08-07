@@ -35,13 +35,13 @@ public class EventService {
 
     public Event createEvent(EventCreateRequestDto createRequestDto) {
         log.info("Creating new event: {}", createRequestDto);
-        Location location = locationService.getLocationById(createRequestDto.locationId());
-        User user = authenticationService.getCurrentAuthenticatedUser();
-
+        var location = locationService.getLocationById(createRequestDto.locationId());
         if (location.capacity() < createRequestDto.maxPlaces()) {
-            throw new IllegalArgumentException("Capacity of location is less than create event: %s < %s"
+            throw new IllegalArgumentException("Capacity of location is: %s, but maxPlaces is: %s"
                     .formatted(location.capacity(), createRequestDto.maxPlaces()));
         }
+
+        User user = authenticationService.getCurrentAuthenticatedUser();
 
         EventEntity eventEntity = new EventEntity(
                 null,

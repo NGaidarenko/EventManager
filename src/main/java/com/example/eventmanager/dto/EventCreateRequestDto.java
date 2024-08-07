@@ -9,7 +9,7 @@ public record EventCreateRequestDto(
         @NotBlank(message = "Name must be not blank")
         String name,
 
-        @NotNull(message = "Max places must be not null")
+        @Positive(message = "Max places must be more than zero")
         int maxPlaces,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING)

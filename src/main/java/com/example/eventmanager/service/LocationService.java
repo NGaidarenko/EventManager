@@ -1,6 +1,5 @@
 package com.example.eventmanager.service;
 
-import com.example.eventmanager.controller.LocationController;
 import com.example.eventmanager.domain.Location;
 import com.example.eventmanager.entity.LocationEntity;
 import com.example.eventmanager.mapper.LocationEntityMapper;
