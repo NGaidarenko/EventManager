@@ -33,6 +33,10 @@ public class EventService {
     @Autowired
     private EventMapper eventMapper;
 
+    @Autowired
+    private NotificationService notificationService;
+
+
     public Event createEvent(EventCreateRequestDto createRequestDto) {
         log.info("Creating new event: {}", createRequestDto);
         var location = locationService.getLocationById(createRequestDto.locationId());
@@ -87,6 +91,7 @@ public class EventService {
         }
 
         eventRepository.changeEventStatus(eventId, EventStatus.CANCELLED);
+        notificationService.changeEventStatus(eventId, EventStatus.CANCELLED);
     }
 
 
@@ -119,6 +124,8 @@ public class EventService {
                     "Registration count is more than maxPlaces: regCount=%s, maxPlaces=%s"
                             .formatted(event.getRegistrationList().size(), updateRequest.maxPlaces()));
         }
+
+        notificationService.changeEventFields(event, updateRequest);
 
         Optional.ofNullable(updateRequest.name()).ifPresent(event::setName);
         Optional.ofNullable(updateRequest.maxPlaces()).ifPresent(event::setMaxPlaces);

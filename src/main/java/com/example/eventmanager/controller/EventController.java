@@ -7,6 +7,7 @@ import com.example.eventmanager.dto.EventSearchFilter;
 import com.example.eventmanager.dto.EventUpdateRequestDto;
 import com.example.eventmanager.mapper.EventDtoMapper;
 import com.example.eventmanager.service.EventService;
+import com.example.eventmanager.service.NotificationService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,7 @@ public class EventController {
     public ResponseEntity<Void> cancelEvent(@PathVariable Long eventId) {
         log.info("Canceling event with id: {}", eventId);
         eventService.cancelEvent(eventId);
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
