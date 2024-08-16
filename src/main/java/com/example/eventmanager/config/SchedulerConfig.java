@@ -30,7 +30,7 @@ public class SchedulerConfig {
         );
 
         List<Long> endedEvent = eventRepository.findEndedEventsWithStatus(EventStatus.STARTED);
-        statedEvent.forEach(eventId ->
+        endedEvent.forEach(eventId ->
                 eventRepository.changeEventStatus(eventId, EventStatus.FINISHED));
     }
 }
