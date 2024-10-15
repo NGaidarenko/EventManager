@@ -1,7 +1,6 @@
 package com.example.eventmanager.config;
 
 import com.example.eventmanager.domain.EventStatus;
-import com.example.eventmanager.entity.EventEntity;
 import com.example.eventmanager.repository.EventRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
