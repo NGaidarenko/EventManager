@@ -1,16 +1,18 @@
 package com.example.eventmanager.service;
 
-import com.example.eventmanager.domain.Event;
+//import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.EventFieldChange;
 import com.example.eventmanager.domain.EventStatus;
 import com.example.eventmanager.dto.EventChangeKafkaMessage;
 import com.example.eventmanager.dto.EventUpdateRequestDto;
 import com.example.eventmanager.entity.EventEntity;
-import com.example.eventmanager.kafka.KafkaProducer;
+//import com.example.eventmanager.kafka.KafkaProducer;
+//import com.example.eventmanager.rabbit.MQConfiguration;
 import com.example.eventmanager.repository.EventRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +25,16 @@ public class NotificationService {
     @Autowired
     private EventRepository eventRepository;
 
+//    @Autowired
+//    private KafkaProducer kafkaProducer;
+
     @Autowired
-    private KafkaProducer kafkaProducer;
+    private RabbitTemplate rabbitTemplate;
 
     @Autowired
     private UserAuthenticationService authenticationService;
+
+    private static final String exchangeName = "testExchange";
 
     public void changeEventStatus(Long eventId, EventStatus status) {
         log.info("Changing status: {}, for event with id: {}", status, eventId);
@@ -41,7 +48,9 @@ public class NotificationService {
 
         changedEventMessage.setStatus(new EventFieldChange<>(event.getStatus(), status));
 
-        kafkaProducer.sendMessage(changedEventMessage);
+        log.info("Rabbit send a changes: {}", changedEventMessage);
+        rabbitTemplate.convertAndSend(exchangeName, "", changedEventMessage);
+//        kafkaProducer.sendMessage(changedEventMessage);
     }
 
     public void changeEventFields(EventEntity event, EventUpdateRequestDto updateRequestDto) {
@@ -84,6 +93,8 @@ public class NotificationService {
                         .setLocationId(new EventFieldChange<>(event.getLocationId(), elem)));
 
         log.info("New changes after send message: {}",changedEventMessage);
-        kafkaProducer.sendMessage(changedEventMessage);
+
+        rabbitTemplate.convertAndSend(exchangeName, "first.key", changedEventMessage);
+//        kafkaProducer.sendMessage(changedEventMessage);
     }
 }
