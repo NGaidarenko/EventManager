@@ -84,6 +84,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/events/search").hasAnyAuthority("ADMIN", "USER")
                                 .requestMatchers(HttpMethod.GET, "/events/my").hasAuthority("USER")
 
+                                .requestMatchers(HttpMethod.GET, "/email").permitAll()
+
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)

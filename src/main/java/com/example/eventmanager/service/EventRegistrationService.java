@@ -1,15 +1,15 @@
 package com.example.eventmanager.service;
 
-import com.example.eventmanager.controller.EventController;
 import com.example.eventmanager.domain.Event;
-import com.example.eventmanager.domain.EventRegistration;
 import com.example.eventmanager.domain.EventStatus;
 import com.example.eventmanager.domain.User;
 import com.example.eventmanager.entity.EventEntity;
 import com.example.eventmanager.entity.EventRegistrationEntity;
+import com.example.eventmanager.entity.UserEntity;
 import com.example.eventmanager.mapper.EventMapper;
 import com.example.eventmanager.repository.EventRegistrationRepository;
 import com.example.eventmanager.repository.EventRepository;
+import com.example.eventmanager.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +34,9 @@ public class EventRegistrationService {
 
     @Autowired
     private EventMapper mapper;
+
+    @Autowired
+    private EmailService emailService;
 
     public void registrationOnEvent(Long eventId) {
         log.info("Register to event with id: {}", eventId);
@@ -62,10 +65,14 @@ public class EventRegistrationService {
                 user.id(),
                 eventEntity)
         );
+
+        emailService.sendMessage(List.of(user.login()),
+                "Registration on event",
+                "You are have been registration on event %s".formatted(eventEntity.getName()));
     }
 
     public void cancelRegistrationOnEvent(Long eventId) {
-        log.info("Canceling from event with id: {}" ,eventId);
+        log.info("Canceling from event with id: {}", eventId);
         User user = authenticationService.getCurrentAuthenticatedUser();
         EventEntity eventEntity = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EntityNotFoundException("Event with id: %s not founded".formatted(eventId)));
@@ -79,6 +86,10 @@ public class EventRegistrationService {
         }
         log.info("Deleting from event with id: {}", eventId);
         registrationRepository.deleteByEventIdAndUserId(eventId, user.id());
+
+        emailService.sendMessage(List.of(user.login()),
+                "Unsubscribing from an event",
+                "You have unsubscribed from the event %s".formatted(eventEntity.getName()));
     }
 
     public List<Event> getUserRegisterEvents() {
@@ -89,5 +100,9 @@ public class EventRegistrationService {
         return entityList.stream()
                 .map(mapper::toDomain)
                 .toList();
+    }
+
+    public List<String> getUserOnEvent(Long id) {
+        return registrationRepository.findAllByEventId(id);
     }
 }
