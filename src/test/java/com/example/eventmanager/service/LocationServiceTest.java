@@ -64,7 +64,7 @@ public class LocationServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+//        MockitoAnnotations.openMocks(this);
 
         location = new Location(1L, "Location Name", "Location Address", 100L, "Description");
         locationEntity = new LocationEntity();
