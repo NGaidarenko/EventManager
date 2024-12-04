@@ -66,9 +66,9 @@ public class EventRegistrationService {
                 eventEntity)
         );
 
-        emailService.sendMessage(List.of(user.login()),
-                "Registration on event",
-                "You are have been registration on event %s".formatted(eventEntity.getName()));
+//        emailService.sendMessage(List.of(user.login()),
+//                "Registration on event",
+//                "You are have been registration on event %s".formatted(eventEntity.getName()));
     }
 
     public void cancelRegistrationOnEvent(Long eventId) {
